@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import Index from './pages/main/Index.jsx';
 import Index2 from './pages/main/Index2.jsx';
 import Main1 from './pages/main/Main1.jsx';
+import AIPortal from './pages/main/AIPortal.jsx';
 import Menu from './pages/menu/Menu.jsx';
 import Chat from './pages/chat/Chat.jsx';
 import Code from './pages/code/Code.jsx';
@@ -32,6 +33,7 @@ export default function App() {
       <Route path="/" element={<Index />} />
       <Route path="/index2" element={<Index2 />} />
       <Route path="/main1" element={<Main1 />} />
+      <Route path="/aiportal" element={<AIPortal />} />
       <Route path="/menu" element={<Menu />} />
       <Route path="/chat" element={<Chat />} />
       <Route path="/code" element={<Code />} />

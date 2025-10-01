@@ -9,6 +9,7 @@ const Navigation = () => {
   const dropdownRef = useRef(null);
 
   const mainNavItems = [
+    { path: '/aiportal', label: 'AI 포탈' },
     { path: '/main1', label: '모니터링' },
     { path: '/datacollector', label: '데이터 수집' },
     { path: '/modelmanage', label: '학습모델' },
