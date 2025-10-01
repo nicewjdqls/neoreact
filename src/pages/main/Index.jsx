@@ -1,19 +1,41 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { 
-  Modal, 
-  Button, 
-  Form, 
+import {
+  Modal,
+  Button,
+  Form,
   Row,
   Col,
-  Card
+  Card,
+  Badge
 } from 'react-bootstrap';
-import { User, Lock, UserPlus, Mail, Eye, EyeOff, CheckCircle, XCircle, Info } from 'lucide-react';
+import {
+  User,
+  Lock,
+  UserPlus,
+  Mail,
+  Eye,
+  EyeOff,
+  CheckCircle,
+  XCircle,
+  Info,
+  ShieldCheck,
+  Cpu,
+  GaugeCircle,
+  BarChart2,
+  ArrowRight,
+  Sparkles,
+  Globe2
+} from 'lucide-react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './Index.css';
 
 const Index = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState('—');
+  const [loginForm, setLoginForm] = useState({ userid: '', password: '' });
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [alertConfig, setAlertConfig] = useState({
@@ -23,7 +45,6 @@ const Index = () => {
     icon: null
   });
 
-  // 회원가입 폼 상태
   const [signupData, setSignupData] = useState({
     userid: '',
     name: '',
@@ -37,13 +58,107 @@ const Index = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  const heroFeatures = [
+    {
+      Icon: ShieldCheck,
+      title: '엔터프라이즈 보안',
+      description: '제로 트러스트 인증과 실시간 감사를 통해 민감 데이터를 안전하게 보호합니다.'
+    },
+    {
+      Icon: Cpu,
+      title: '멀티 모델 오케스트레이션',
+      description: 'LLM · 음성 · 비전 모델을 단일 파이프라인으로 통합해 워크플로우를 자동화합니다.'
+    },
+    {
+      Icon: Globe2,
+      title: '글로벌 엣지 인프라',
+      description: '11개 리전에서 40ms 이하 응답 속도로 전 세계 사용자에게 일관된 경험을 제공합니다.'
+    }
+  ];
+
+  const kpiCards = [
+    {
+      Icon: GaugeCircle,
+      title: '활성 세션',
+      value: '1,248',
+      helper: '동시 사용자 · 5분 평균',
+      delta: '+4.2%'
+    },
+    {
+      Icon: BarChart2,
+      title: '평균 응답시간 (p90)',
+      value: '218 ms',
+      helper: '모델 + 네트워크 지연',
+      delta: '-12 ms'
+    },
+    {
+      Icon: Cpu,
+      title: 'GPU 활용률',
+      value: '78%',
+      helper: '클러스터 전체',
+      delta: '+5%'
+    },
+    {
+      Icon: ShieldCheck,
+      title: 'SLA 가동률',
+      value: '99.99%',
+      helper: '금일 누적',
+      delta: '+0.2%'
+    }
+  ];
+
+  const initiativeCards = [
+    {
+      title: 'LLM 품질 프로그램',
+      description:
+        '실사용 피드백과 휴리스틱 평가를 결합해 모델 응답 품질을 분기별로 향상합니다.',
+      owner: 'Experience Lab'
+    },
+    {
+      title: 'AI 거버넌스 옵스',
+      description:
+        '승인·검토·감사를 자동화한 정책 엔진으로 규제와 컴플라이언스 요구에 대응합니다.',
+      owner: 'Trust Office'
+    },
+    {
+      title: '데이터 패브릭 허브',
+      description:
+        '내부·외부 데이터를 연결하는 보안 파이프라인으로 학습/추론 모두를 지원합니다.',
+      owner: 'Data Platform'
+    }
+  ];
+
+  const insightHighlights = [
+    { label: 'Production', value: '가동률 99.99%', helper: 'SLA 5월 대비 +0.2%' },
+    { label: 'Latency', value: '218 ms', helper: '북미 리전 기준' },
+    { label: 'Cost Guardrail', value: '예산 대비 92%', helper: '예측: 안정' }
+  ];
+
+  const timelineUpdates = [
+    {
+      time: '09:24',
+      title: '신규 파인튜닝 배포',
+      detail: 'korean-mistral v1.3 모델이 AP Northeast 리전에 적용되었습니다.'
+    },
+    {
+      time: '08:51',
+      title: '알림: 토큰 사용 급증',
+      detail: '파트너 서비스의 API 토큰 사용량이 기준 대비 18% 증가했습니다.'
+    },
+    {
+      time: '08:05',
+      title: '보안 감사 완료',
+      detail: 'Access Policy 2.1이 전사 정책과 정합성을 유지하는 것으로 확인되었습니다.'
+    }
+  ];
+
   const showNotification = (title, message, variant = 'danger') => {
     const iconMap = {
       success: <CheckCircle size={48} className="text-success mb-3" />,
       danger: <XCircle size={48} className="text-danger mb-3" />,
       info: <Info size={48} className="text-info mb-3" />
     };
-    
+
     setAlertConfig({
       title,
       message,
@@ -59,14 +174,10 @@ const Index = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    const loginUser = document.getElementById('loginUser').value;
-    const loginPass = document.getElementById('loginPass').value;
-    
-    if (loginUser === 'admin' && loginPass === 'admin') {
+
+    if (loginForm.userid === 'admin' && loginForm.password === 'admin') {
       setIsLoggedIn(true);
-      document.getElementById('loginModal').style.display = 'none';
-      document.getElementById('dashboard').classList.remove('hidden');
-      document.getElementById('userName').textContent = loginUser;
+      setCurrentUser(loginForm.userid);
       showNotification('로그인 성공', '성공적으로 로그인되었습니다.', 'success');
     } else {
       showNotification('로그인 실패', '아이디 또는 비밀번호가 올바르지 않습니다.', 'danger');
@@ -75,14 +186,14 @@ const Index = () => {
 
   const handleLogout = () => {
     setIsLoggedIn(false);
-    document.getElementById('loginModal').style.display = 'flex';
-    document.getElementById('dashboard').classList.add('hidden');
-    document.getElementById('loginForm').reset();
+    setCurrentUser('—');
+    setLoginForm({ userid: '', password: '' });
+    setShowLoginPassword(false);
     showNotification('로그아웃 완료', '성공적으로 로그아웃되었습니다.', 'info');
   };
 
   const handleSignupChange = (field, value) => {
-    setSignupData(prev => ({
+    setSignupData((prev) => ({
       ...prev,
       [field]: value
     }));
@@ -101,52 +212,52 @@ const Index = () => {
       showNotification('아이디 오류', '아이디를 입력해주세요.', 'danger');
       return false;
     }
-    
+
     if (!signupData.name.trim()) {
       showNotification('이름 오류', '이름을 입력해주세요.', 'danger');
       return false;
     }
-    
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(signupData.email)) {
       showNotification('이메일 오류', '올바른 이메일 형식을 입력해주세요.', 'danger');
       return false;
     }
-    
+
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!passwordRegex.test(signupData.password)) {
       showNotification(
-        '비밀번호 오류', 
-        '비밀번호는 8자 이상이며, 영문 대소문자, 숫자, 특수문자를 모두 포함해야 합니다.', 
+        '비밀번호 오류',
+        '비밀번호는 8자 이상이며, 영문 대소문자, 숫자, 특수문자를 모두 포함해야 합니다.',
         'danger'
       );
       return false;
     }
-    
+
     if (signupData.password !== signupData.password_confirm) {
       showNotification('비밀번호 오류', '비밀번호가 일치하지 않습니다.', 'danger');
       return false;
     }
-    
+
     if (!signupData.agree) {
       showNotification('약관 동의', '이용약관 및 개인정보 처리방침에 동의해주세요.', 'danger');
       return false;
     }
-    
+
     return true;
   };
 
   const handleSignupSubmit = (e) => {
     e.preventDefault();
-    
+
     if (!validateSignupForm()) return;
-    
+
     showNotification(
-      '회원가입 완료', 
-      '회원가입이 성공적으로 완료되었습니다. 로그인해주세요.', 
+      '회원가입 완료',
+      '회원가입이 성공적으로 완료되었습니다. 로그인해주세요.',
       'success'
     );
-    
+
     setShowSignupModal(false);
     setSignupData({
       userid: '',
@@ -162,63 +273,310 @@ const Index = () => {
   };
 
   return (
-    <div className="page Index">
-      {/* 알림 Modal */}
-      <Modal 
-        show={showAlertModal} 
-        onHide={() => setShowAlertModal(false)}
-        centered
-        backdrop="static"
-      >
+    <div className="neo-portal page Index">
+      <div className="neo-background" />
+      <div className="neo-gridlines" aria-hidden="true" />
+      <div className="neo-shell">
+        <header className="neo-header">
+          <div className="neo-brand">
+            <span className="neo-brand-mark">NEO</span>
+            <div>
+              <div className="neo-brand-name">Orion AI Control Center</div>
+              <p className="neo-brand-helper">
+                엔터프라이즈급 모델 운영과 거버넌스를 위한 차세대 포털
+              </p>
+            </div>
+          </div>
+
+          <nav className="neo-nav">
+            <Link to="/">모니터링</Link>
+            <Link to="/datacollector">데이터</Link>
+            <Link to="/modelmanage">모델</Link>
+            <Link to="/chat">대화형 AI</Link>
+            <Link to="/code">APIs</Link>
+          </nav>
+
+          <div className="neo-header-actions">
+            <Badge bg="" className="neo-badge-enterprise">
+              <Sparkles size={14} />
+              <span>Enterprise</span>
+            </Badge>
+            {isLoggedIn ? (
+              <Button className="neo-header-btn" onClick={handleLogout}>
+                로그아웃
+              </Button>
+            ) : (
+              <Button className="neo-header-btn" onClick={() => setShowSignupModal(true)}>
+                무료 체험
+              </Button>
+            )}
+          </div>
+        </header>
+
+        {!isLoggedIn ? (
+          <main className="neo-hero">
+            <section className="neo-hero-copy">
+              <Badge bg="" className="neo-badge-launch">
+                <Sparkles size={14} />
+                <span>Neo AI Portal 3.0</span>
+              </Badge>
+              <h1>
+                기업 규모의 <span className="neo-gradient-text">AI 오케스트레이션</span>을 위한
+                프리미엄 허브
+              </h1>
+              <p>
+                모델 모니터링, 비용 거버넌스, 데이터 파이프라인을 하나의 콘솔에서 연결하고 AI 서비스 혁신 속도를
+                높이세요.
+              </p>
+
+              <ul className="neo-feature-list">
+                {heroFeatures.map(({ Icon, title, description }) => (
+                  <li key={title}>
+                    <span className="neo-feature-icon">
+                      <Icon size={18} />
+                    </span>
+                    <div>
+                      <strong>{title}</strong>
+                      <p>{description}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="neo-cta-group">
+                <Button className="neo-primary-btn" onClick={() => setShowSignupModal(true)}>
+                  엔터프라이즈 도입 문의 <ArrowRight size={16} />
+                </Button>
+                <Button
+                  className="neo-ghost-btn"
+                  variant="outline-light"
+                  onClick={() => navigate('/index2')}
+                >
+                  라이브 데모 보기
+                </Button>
+              </div>
+            </section>
+
+            <Card className="neo-login-card shadow-lg border-0">
+              <Card.Body>
+                <div className="d-flex align-items-center justify-content-between mb-3">
+                  <div>
+                    <h5 className="mb-1">보안 로그인</h5>
+                    <p className="neo-muted">데모 계정 admin / admin</p>
+                  </div>
+                  <Badge bg="" className="neo-badge-secure">
+                    <ShieldCheck size={14} />
+                    <span>SSO Ready</span>
+                  </Badge>
+                </div>
+
+                <Form onSubmit={handleLogin} className="neo-form">
+                  <Form.Group controlId="loginUser" className="mb-3">
+                    <Form.Label>아이디</Form.Label>
+                    <div className="neo-input-wrapper">
+                      <User size={16} />
+                      <Form.Control
+                        type="text"
+                        value={loginForm.userid}
+                        onChange={(e) =>
+                          setLoginForm((prev) => ({ ...prev, userid: e.target.value }))
+                        }
+                        className="neo-input"
+                        placeholder="enterprise.admin"
+                        required
+                      />
+                    </div>
+                  </Form.Group>
+
+                  <Form.Group controlId="loginPass" className="mb-3">
+                    <Form.Label>비밀번호</Form.Label>
+                    <div className="neo-input-wrapper">
+                      <Lock size={16} />
+                      <Form.Control
+                        type={showLoginPassword ? 'text' : 'password'}
+                        value={loginForm.password}
+                        onChange={(e) =>
+                          setLoginForm((prev) => ({ ...prev, password: e.target.value }))
+                        }
+                        className="neo-input"
+                        placeholder="********"
+                        required
+                      />
+                      <button
+                        type="button"
+                        className="neo-eye-btn"
+                        onClick={() => setShowLoginPassword((prev) => !prev)}
+                        aria-label="비밀번호 보기 전환"
+                      >
+                        {showLoginPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                      </button>
+                    </div>
+                  </Form.Group>
+
+                  <div className="neo-form-actions">
+                    <Button type="submit" className="neo-primary-btn w-100">
+                      로그인
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="link"
+                      className="neo-link-btn"
+                      onClick={handleGuest}
+                    >
+                      게스트로 둘러보기
+                    </Button>
+                  </div>
+                </Form>
+              </Card.Body>
+            </Card>
+          </main>
+        ) : (
+          <main className="neo-dashboard">
+            <section className="neo-dashboard-header">
+              <div>
+                <h2>실시간 운영 현황</h2>
+                <p className="neo-muted">
+                  모델 성능, 사용자 경험, 컴플라이언스를 한눈에 살펴보세요.
+                </p>
+              </div>
+              <div className="neo-dashboard-meta">
+                <span>환경: Production</span>
+                <span>사용자: {currentUser}</span>
+              </div>
+            </section>
+
+            <section className="neo-kpi-grid">
+              {kpiCards.map(({ Icon, title, value, helper, delta }) => (
+                <div key={title} className="neo-card neo-kpi-card">
+                  <span className="neo-kpi-icon">
+                    <Icon size={20} />
+                  </span>
+                  <div className="neo-kpi-content">
+                    <div className="neo-kpi-title">{title}</div>
+                    <div className="neo-kpi-value">{value}</div>
+                    <div className="neo-kpi-helper">{helper}</div>
+                  </div>
+                  <Badge
+                    bg=""
+                    className={`neo-kpi-delta ${delta.startsWith('-') ? 'is-negative' : 'is-positive'}`}
+                  >
+                    {delta}
+                  </Badge>
+                </div>
+              ))}
+            </section>
+
+            <section className="neo-dashboard-grid">
+              <div className="neo-card neo-card-large">
+                <div className="neo-card-header">
+                  <div>
+                    <h3>모델 처리량 & 지연</h3>
+                    <p className="neo-muted">요청 성공률과 응답시간 추이를 실시간 분석합니다.</p>
+                  </div>
+                  <Badge bg="" className="neo-badge-live">
+                    <span className="neo-pulse" />
+                    Live
+                  </Badge>
+                </div>
+                <div className="neo-chart-placeholder">차트는 데이터 소스 연결 시 활성화됩니다.</div>
+                <div className="neo-highlight-bar">
+                  {insightHighlights.map((item) => (
+                    <div key={item.label}>
+                      <span className="neo-highlight-label">{item.label}</span>
+                      <strong>{item.value}</strong>
+                      <p>{item.helper}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="neo-card neo-card-medium">
+                <div className="neo-card-header">
+                  <div>
+                    <h3>전략 과제</h3>
+                    <p className="neo-muted">Quarterly OKR과 연계된 핵심 이니셔티브</p>
+                  </div>
+                </div>
+                <ul className="neo-initiative-list">
+                  {initiativeCards.map((item) => (
+                    <li key={item.title}>
+                      <div>
+                        <strong>{item.title}</strong>
+                        <p>{item.description}</p>
+                      </div>
+                      <span>{item.owner}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="neo-card neo-card-medium">
+                <div className="neo-card-header">
+                  <div>
+                    <h3>실시간 알림</h3>
+                    <p className="neo-muted">시스템 이벤트와 거버넌스 알림 스트림</p>
+                  </div>
+                </div>
+                <ul className="neo-timeline">
+                  {timelineUpdates.map((item) => (
+                    <li key={item.title}>
+                      <span className="neo-timeline-time">{item.time}</span>
+                      <div>
+                        <strong>{item.title}</strong>
+                        <p>{item.detail}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </section>
+          </main>
+        )}
+      </div>
+
+      <Modal show={showAlertModal} onHide={() => setShowAlertModal(false)} centered backdrop="static">
         <Modal.Body className="text-center p-4">
           {alertConfig.icon}
           <h5 className="fw-bold mb-3">{alertConfig.title}</h5>
           <p className="text-muted mb-4">{alertConfig.message}</p>
-          <Button 
+          <Button
             variant={alertConfig.variant}
             onClick={() => setShowAlertModal(false)}
             className="px-4 shadow-sm"
-            style={{ 
+            style={{
               borderRadius: '12px',
-              background: alertConfig.variant === 'success' 
-                ? 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)'
-                : alertConfig.variant === 'info'
-                ? 'linear-gradient(135deg, #4299e1 0%, #3182ce 100%)'
-                : 'linear-gradient(135deg, #f56565 0%, #e53e3e 100%)',
+              background:
+                alertConfig.variant === 'success'
+                  ? 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)'
+                  : alertConfig.variant === 'info'
+                  ? 'linear-gradient(135deg, #4299e1 0%, #3182ce 100%)'
+                  : 'linear-gradient(135deg, #f56565 0%, #e53e3e 100%)',
               border: 'none'
             }}
           >
             확인
           </Button>
         </Modal.Body>
-              </Modal>
+      </Modal>
 
-      {/* 회원가입 Modal */}
-      <Modal 
-        show={showSignupModal} 
+      <Modal
+        show={showSignupModal}
         onHide={() => setShowSignupModal(false)}
         centered
         size="lg"
         backdrop="static"
+        dialogClassName="neo-signup-modal"
       >
-        <Modal.Header 
-          closeButton 
-          className="border-0 text-white"
-          style={{ 
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            borderRadius: '20px 20px 0 0'
-          }}
-        >
-          <Modal.Title className="fw-bold d-flex align-items-center">
-            <UserPlus size={20} className="me-2" />
-            회원가입
-          </Modal.Title>
-        </Modal.Header>
-        
-        <Modal.Body className="p-4">
-          <Form onSubmit={handleSignupSubmit}>
+        <Form onSubmit={handleSignupSubmit}>
+          <Modal.Header closeButton className="border-0 neo-signup-header">
+            <Modal.Title className="fw-bold d-flex align-items-center">
+              <UserPlus size={20} className="me-2" />
+              회원가입
+            </Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body className="p-4">
             <Row className="g-3">
-              {/* 아이디 */}
               <Col md={6}>
                 <Form.Group>
                   <Form.Label className="fw-medium d-flex align-items-center">
@@ -235,7 +593,7 @@ const Index = () => {
                       className="shadow-sm flex-1"
                       style={{ borderRadius: '12px' }}
                     />
-                    <Button 
+                    <Button
                       variant="outline-primary"
                       onClick={checkDuplicate}
                       type="button"
@@ -248,7 +606,6 @@ const Index = () => {
                 </Form.Group>
               </Col>
 
-              {/* 이름 */}
               <Col md={6}>
                 <Form.Group>
                   <Form.Label className="fw-medium d-flex align-items-center">
@@ -269,7 +626,6 @@ const Index = () => {
             </Row>
 
             <Row className="g-3 mt-1">
-              {/* 이메일 */}
               <Col md={6}>
                 <Form.Group>
                   <Form.Label className="fw-medium d-flex align-items-center">
@@ -288,7 +644,6 @@ const Index = () => {
                 </Form.Group>
               </Col>
 
-              {/* 역할 */}
               <Col md={6}>
                 <Form.Group>
                   <Form.Label className="fw-medium d-flex align-items-center">
@@ -310,7 +665,6 @@ const Index = () => {
             </Row>
 
             <Row className="g-3 mt-1">
-              {/* 비밀번호 */}
               <Col md={6}>
                 <Form.Group>
                   <Form.Label className="fw-medium d-flex align-items-center">
@@ -319,7 +673,7 @@ const Index = () => {
                   </Form.Label>
                   <div className="position-relative">
                     <Form.Control
-                      type={showPassword ? "text" : "password"}
+                      type={showPassword ? 'text' : 'password'}
                       placeholder="비밀번호를 입력하세요"
                       value={signupData.password}
                       onChange={(e) => handleSignupChange('password', e.target.value)}
@@ -327,7 +681,7 @@ const Index = () => {
                       className="shadow-sm pe-5"
                       style={{ borderRadius: '12px' }}
                     />
-                    <Button 
+                    <Button
                       variant="link"
                       onClick={() => setShowPassword(!showPassword)}
                       type="button"
@@ -337,13 +691,10 @@ const Index = () => {
                       {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                     </Button>
                   </div>
-                  <small className="text-muted">
-                    영문 대소문자, 숫자, 특수문자 포함 8자 이상
-                  </small>
+                  <small className="text-muted">영문 대소문자, 숫자, 특수문자 포함 8자 이상</small>
                 </Form.Group>
               </Col>
 
-              {/* 비밀번호 확인 */}
               <Col md={6}>
                 <Form.Group>
                   <Form.Label className="fw-medium d-flex align-items-center">
@@ -352,15 +703,17 @@ const Index = () => {
                   </Form.Label>
                   <div className="position-relative">
                     <Form.Control
-                      type={showConfirmPassword ? "text" : "password"}
+                      type={showConfirmPassword ? 'text' : 'password'}
                       placeholder="비밀번호를 다시 입력하세요"
                       value={signupData.password_confirm}
-                      onChange={(e) => handleSignupChange('password_confirm', e.target.value)}
+                      onChange={(e) =>
+                        handleSignupChange('password_confirm', e.target.value)
+                      }
                       required
                       className="shadow-sm pe-5"
                       style={{ borderRadius: '12px' }}
                     />
-                    <Button 
+                    <Button
                       variant="link"
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                       type="button"
@@ -374,7 +727,6 @@ const Index = () => {
               </Col>
             </Row>
 
-            {/* 이용약관 동의 */}
             <Row className="g-3 mt-3">
               <Col>
                 <Form.Check
@@ -384,372 +736,48 @@ const Index = () => {
                   onChange={(e) => handleSignupChange('agree', e.target.checked)}
                   label={
                     <span className="fw-medium">
-                      <span className="text-primary text-decoration-underline" style={{ cursor: 'pointer' }}>이용약관</span> 및{' '}
-                      <span className="text-primary text-decoration-underline" style={{ cursor: 'pointer' }}>개인정보 처리방침</span>에 동의합니다.
+                      <span
+                        className="text-primary text-decoration-underline"
+                        style={{ cursor: 'pointer' }}
+                      >
+                        이용약관
+                      </span>{' '}
+                      및{' '}
+                      <span
+                        className="text-primary text-decoration-underline"
+                        style={{ cursor: 'pointer' }}
+                      >
+                        개인정보 처리방침
+                      </span>
+                      에 동의합니다.
                     </span>
                   }
                   required
                 />
               </Col>
             </Row>
-          </Form>
-        </Modal.Body>
-        
-        <Modal.Footer className="border-0 bg-light" style={{ borderRadius: '0 0 20px 20px' }}>
-          <Button 
-            variant="outline-secondary" 
-            onClick={() => setShowSignupModal(false)}
-            className="px-4"
-            style={{ borderRadius: '12px' }}
-          >
-            취소
-          </Button>
-          <Button 
-            variant="primary"
-            onClick={handleSignupSubmit}
-            className="px-4 shadow-sm"
-            style={{ 
-              borderRadius: '12px',
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              border: 'none'
-            }}
-          >
-            <UserPlus size={16} className="me-2" />
-            가입하기
-          </Button>
-        </Modal.Footer>
+          </Modal.Body>
+
+          <Modal.Footer className="border-0 bg-light neo-signup-footer">
+            <Button
+              variant="outline-secondary"
+              onClick={() => setShowSignupModal(false)}
+              className="px-4"
+              style={{ borderRadius: '12px' }}
+              type="button"
+            >
+              취소
+            </Button>
+            <Button
+              type="submit"
+              className="px-4 neo-primary-btn"
+              style={{ borderRadius: '12px' }}
+            >
+              가입 완료
+            </Button>
+          </Modal.Footer>
+        </Form>
       </Modal>
-
-      {/* Login Modal */}
-      <div id="loginModal" className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
-        <Card className="shadow-lg" style={{ width: '400px', borderRadius: '20px' }}>
-          <Card.Header className="text-center border-0" style={{ 
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            borderRadius: '20px 20px 0 0',
-            color: 'white'
-          }}>
-            <div className="d-flex align-items-center justify-content-center mb-2">
-              <div 
-                className="rounded-circle d-flex align-items-center justify-content-center me-3"
-                style={{ width: '50px', height: '50px', background: 'rgba(255,255,255,0.2)' }}
-              >
-                <User size={24} />
-              </div>
-              <div>
-                <h4 className="mb-0 fw-bold">Neo AI Portal</h4>
-                <small className="opacity-75">사용자 로그인</small>
-              </div>
-            </div>
-          </Card.Header>
-          
-          <Card.Body className="p-4">
-            <Form id="loginForm" onSubmit={handleLogin}>
-              <Row className="g-3">
-                <Col>
-                  <Form.Group>
-                    <Form.Label className="fw-medium d-flex align-items-center">
-                      <User size={16} className="me-2 text-primary" />
-                      아이디
-                    </Form.Label>
-                    <Form.Control
-                      id="loginUser"
-                      type="text"
-                      placeholder="아이디를 입력하세요"
-                      required
-                      className="shadow-sm"
-                      style={{ borderRadius: '12px' }}
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
-              
-              <Row className="g-3 mt-1">
-                <Col>
-                  <Form.Group>
-                    <Form.Label className="fw-medium d-flex align-items-center">
-                      <Lock size={16} className="me-2 text-primary" />
-                      비밀번호
-                    </Form.Label>
-                    <Form.Control
-                      id="loginPass"
-                      type="password"
-                      placeholder="비밀번호를 입력하세요"
-                      required
-                      className="shadow-sm"
-                      style={{ borderRadius: '12px' }}
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
-              
-              <Row className="g-2 mt-3">
-                <Col>
-                  <Button 
-                    type="submit" 
-                    className="w-100 fw-medium shadow-sm"
-                    style={{ 
-                      borderRadius: '12px',
-                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                      border: 'none',
-                      padding: '12px'
-                    }}
-                  >
-                    로그인
-                  </Button>
-                </Col>
-                <Col xs="auto">
-                  <Button 
-                    variant="outline-secondary"
-                    onClick={handleGuest}
-                    className="px-4 shadow-sm"
-                    style={{ borderRadius: '12px', padding: '12px 20px' }}
-                  >
-                    게스트
-                  </Button>
-                </Col>
-              </Row>
-            </Form>
-            
-            <hr className="my-4" />
-            
-            <div className="text-center">
-              <small className="text-muted">
-                계정이 없으신가요?{' '}
-                <Button
-                  variant="link"
-                  className="p-0 text-decoration-none fw-medium"
-                  onClick={() => setShowSignupModal(true)}
-                  style={{ color: '#667eea' }}
-                >
-                  회원가입
-                </Button>
-              </small>
-            </div>
-          </Card.Body>
-        </Card>
-      </div>
-
-      {/* Dashboard (기존 코드 유지) */}
-      <div id="dashboard" className="max-w-[1300px] mx-auto p-6 hidden">
-        {/* Header */}
-        <header className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-4">
-            <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 grid place-items-center text-white font-bold">AI</div>
-            <div>
-              <h1 className="text-2xl font-semibold">Neo AI Portal</h1>
-              <p className="text-sm text-gray-500">실시간 모델 & 인프라 모니터링 · 서비스 상태 · 사용량</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <div className="text-sm text-right">
-              <div className="text-xs text-gray-500">환경</div>
-              <div className="font-medium">Production</div>
-            </div>
-            <div className="text-sm text-right">
-              <div className="text-xs text-gray-500">사용자</div>
-              <div id="userName" className="font-medium">—</div>
-            </div>
-            <button id="logoutBtn" className="px-4 py-2 rounded-lg bg-rose-600 text-white hover:bg-rose-700" onClick={handleLogout}>로그아웃</button>
-          </div>
-        </header>
-
-        {/* 메뉴 바 */}
-        <nav className="bg-slate-100 px-4 py-2 rounded-lg mb-6">
-          <ul className="flex gap-6 text-sm font-medium">
-            <li><Link to="/" className="text-indigo-600">모니터링</Link></li>
-            <li><Link to="/datacollector" className="hover:text-indigo-600">데이터 수집</Link></li>
-            <li><Link to="/modelmanage" className="hover:text-indigo-600">학습모델</Link></li>
-            <li><Link to="/chat" className="hover:text-indigo-600">AI Chat관리</Link></li>
-            <li><Link to="/code" className="hover:text-indigo-600">APIs</Link></li>
-            <li><span className="cursor-pointer hover:text-indigo-600">설정</span></li>
-          </ul>
-        </nav>
-        
-        {/* KPI row */}
-        <section className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
-          <div className="bg-white p-5 rounded-lg shadow">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="text-xs text-gray-500">활성 세션</div>
-                <div id="kpi-sessions" className="text-2xl font-semibold">1,247</div>
-                <div className="text-xs text-gray-500">동시 사용자 / 지난 1분</div>
-              </div>
-              <div className="text-right">
-                <div className="text-xs text-gray-500">에러율</div>
-                <div id="kpi-error" className="text-xl text-red-600 font-semibold">0.3%</div>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white p-5 rounded-lg shadow">
-            <div className="text-xs text-gray-500">평균 응답시간 (p90)</div>
-            <div id="kpi-latency" className="text-2xl font-semibold my-2">248 ms</div>
-            <div className="text-xs text-gray-500">지연 시간 추적 (모델 + 네트워크)</div>
-          </div>
-
-          <div className="bg-white p-5 rounded-lg shadow">
-            <div className="text-xs text-gray-500">토큰 사용량 (오늘)</div>
-            <div id="kpi-tokens" className="text-2xl font-semibold my-2">2.3M</div>
-            <div className="text-xs text-gray-500">총 토큰 / API 요청</div>
-          </div>
-
-          <div className="bg-white p-5 rounded-lg shadow">
-            <div className="text-xs text-gray-500">만족도 평가(오늘)</div>
-            <div id="kpi-cost" className="text-2xl font-semibold my-2">4.2★</div>
-            <div className="text-xs text-gray-500">만족도 평가 합산 (추정)</div>
-          </div>
-
-          <div className="bg-white p-5 rounded-lg shadow">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="text-xs text-gray-500">APIs 사용현황(오늘)</div>
-                <div id="api-sessions" className="text-2xl font-semibold my-2">8,942</div>
-                <div className="text-xs text-gray-500">총 API호출 현황</div>
-              </div>
-              <div className="text-right">
-                <div className="text-xs text-gray-500">에러율</div>
-                <div id="api-error" className="text-xl text-red-600 font-semibold">0.1%</div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Main grid */}
-        <section className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          {/* charts (left: 2 cols) */}
-          <div className="lg:col-span-2 space-y-4">
-            <div className="bg-white p-4 rounded-lg shadow">
-              <div className="flex items-start justify-between mb-3">
-                <div>
-                  <h2 className="text-lg font-semibold">모델 처리량 & 지연</h2>
-                  <p className="text-sm text-gray-500">요청 수 · 성공/실패 비율 · p50/p90 응답시간</p>
-                </div>
-                <div className="text-sm text-gray-500 text-right">
-                  <div>업데이트: <span id="chart-last-update">방금 전</span></div>
-                </div>
-              </div>
-              <div className="relative h-64 bg-gray-50 rounded flex items-center justify-center">
-                <span className="text-gray-400">차트 영역 (Chart.js 연동 필요)</span>
-              </div>
-            </div>
-
-            <div className="bg-white p-4 rounded-lg shadow">
-              <div className="flex items-start justify-between mb-3">
-                <div>
-                  <h2 className="text-lg font-semibold">모델별 요청 분포</h2>
-                  <p className="text-sm text-gray-500">각 모델이 처리하는 요청 비율</p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <select id="modelFilter" className="border rounded-md px-2 py-1 text-sm">
-                    <option value="all">모든 모델</option>
-                    <option value="gpt-4">gpt-4</option>
-                    <option value="gpt-5">gpt-5</option>
-                    <option value="llama">llama</option>
-                  </select>
-                </div>
-              </div>
-              <div className="relative h-64 bg-gray-50 rounded flex items-center justify-center">
-                <span className="text-gray-400">파이 차트 영역</span>
-              </div>
-            </div>
-
-            {/* 데이터 수집 차트 */}
-            <div className="bg-white p-4 rounded-lg shadow">
-              <h2 className="text-lg font-semibold mb-2">데이터 수집 현황</h2>
-              <p className="text-sm text-gray-500 mb-2">그룹별 수집된 데이터 건수</p>
-              <div className="relative h-64 bg-gray-50 rounded flex items-center justify-center">
-                <span className="text-gray-400">데이터 수집 차트 영역</span>
-              </div>
-            </div>
-            
-            <div className="bg-white p-4 rounded-lg shadow">
-              <div className="flex items-start justify-between mb-3">
-                <div>
-                  <h2 className="text-lg font-semibold">실시간 로그 (최근 100개)</h2>
-                  <p className="text-sm text-gray-500">오류 / 경고 / 상태 변경</p>
-                </div>
-                <div className="text-sm text-gray-500">필터:
-                  <select id="logLevel" className="border rounded-md px-2 py-1 text-sm ml-2">
-                    <option>ALL</option><option>ERROR</option><option>WARN</option><option>INFO</option>
-                  </select>
-                </div>
-              </div>
-              <div id="logBox" className="h-48 overflow-y-auto p-2 border rounded-md bg-slate-50">
-                <div className="text-sm text-gray-600">
-                  <div>[INFO] 2024-09-21 14:32:15 - Model GPT-4 request processed successfully</div>
-                  <div>[INFO] 2024-09-21 14:32:10 - New user session started</div>
-                  <div>[WARN] 2024-09-21 14:31:55 - High GPU utilization detected (85%)</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* right: infra */}
-          <aside className="space-y-4">
-            <div className="bg-white p-4 rounded-lg shadow">
-              <h3 className="text-md font-semibold mb-2">GPU / 서버 자원</h3>
-              <div className="grid grid-cols-1 gap-2">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="text-sm text-gray-500">GPU 사용률 (전체)</div>
-                    <div id="gpuUsage" className="text-lg font-medium">73%</div>
-                  </div>
-                  <div className="w-[120px] h-[40px] bg-gray-100 rounded"></div>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="text-sm text-gray-500">메모리 사용</div>
-                    <div id="memUsage" className="text-lg font-medium">24.3 / 32 GB</div>
-                  </div>
-                  <div className="w-[120px] h-[40px] bg-gray-100 rounded"></div>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="text-sm text-gray-500">큐 대기 길이</div>
-                    <div id="queueLen" className="text-lg font-medium">12</div>
-                  </div>
-                  <div className="w-[120px] h-[40px] bg-gray-100 rounded"></div>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white p-4 rounded-lg shadow">
-              <h3 className="text-md font-semibold mb-2">노드 상태</h3>
-              <div id="nodes" className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Node-1</span>
-                  <span className="px-2 py-1 text-xs bg-green-100 text-green-800 rounded">정상</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Node-2</span>
-                  <span className="px-2 py-1 text-xs bg-green-100 text-green-800 rounded">정상</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Node-3</span>
-                  <span className="px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded">주의</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white p-4 rounded-lg shadow">
-              <h3 className="text-md font-semibold mb-2">알림 & 이벤트</h3>
-              <div id="alerts" className="space-y-2 text-sm text-gray-500">현재 이상 없음</div>
-            </div>
-          </aside>
-        </section>
-
-        {/* footer */}
-        <footer className="mt-6 flex items-center justify-between">
-          <div className="text-sm text-gray-500">데이터는 샘플이며 실제 운영과 연동하려면 API 또는 WebSocket 엔드포인트를 연결하세요.</div>
-          <div className="flex items-center gap-3">
-            <button id="refreshBtn" className="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200">강제 새로고침</button>
-            <button id="pauseBtn" className="px-4 py-2 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100">알림 일시정지</button>
-          </div>
-        </footer>
-      </div>
     </div>
   );
 };
