@@ -1,0 +1,410 @@
+/* Auth 컴포넌트 공통 스타일 */
+
+.auth-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* 검색 섹션 */
+.auth-search-section {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .auth-search-section {
+    flex-direction: row;
+    align-items: end;
+    justify-content: space-between;
+  }
+}
+
+.auth-search-inputs {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  flex: 1;
+}
+
+@media (min-width: 768px) {
+  .auth-search-inputs {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.auth-input-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.auth-input-group label {
+  width: 8rem;
+  color: #6b7280;
+  font-size: 0.875rem;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.auth-input {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  transition: all 0.15s ease;
+}
+
+.auth-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.auth-input::placeholder {
+  color: #9ca3af;
+}
+
+/* 버튼 그룹 */
+.auth-button-group {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+@media (min-width: 768px) {
+  .auth-button-group {
+    justify-content: flex-end;
+  }
+}
+
+.auth-btn {
+  padding: 0.5rem 1.5rem;
+  border: none;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.auth-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.auth-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.auth-btn-blue {
+  background-color: #3b82f6;
+}
+
+.auth-btn-blue:hover {
+  background-color: #2563eb;
+}
+
+.auth-btn-gray {
+  background-color: #6b7280;
+}
+
+.auth-btn-gray:hover {
+  background-color: #4b5563;
+}
+
+.auth-btn-green {
+  background-color: #059669;
+}
+
+.auth-btn-green:hover {
+  background-color: #047857;
+}
+
+.auth-btn-purple {
+  background-color: #7c3aed;
+}
+
+.auth-btn-purple:hover {
+  background-color: #6d28d9;
+}
+
+.auth-btn-small {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+}
+
+/* 테이블 섹션 */
+.auth-table-section {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.auth-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.auth-section-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 1rem 0;
+}
+
+.auth-table-container {
+  overflow-x: auto;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+}
+
+.auth-table {
+  width: 100%;
+  font-size: 0.875rem;
+  color: #374151;
+  border-collapse: collapse;
+}
+
+.auth-table thead {
+  background-color: #f9fafb;
+  color: #374151;
+}
+
+.auth-table th,
+.auth-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+  vertical-align: middle;
+}
+
+.auth-table th {
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.auth-table tbody tr {
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.auth-table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+.auth-table tbody tr.selected {
+  background-color: #dbeafe;
+}
+
+.auth-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.auth-empty-message {
+  text-align: center;
+  color: #6b7280;
+  font-style: italic;
+  padding: 2rem !important;
+}
+
+/* 메뉴명 레벨 스타일 */
+.auth-menu-name.level-0 {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.auth-menu-name.level-1 {
+  padding-left: 1.5rem;
+  color: #4b5563;
+  position: relative;
+}
+
+.auth-menu-name.level-1::before {
+  content: '└';
+  position: absolute;
+  left: 0.5rem;
+  color: #9ca3af;
+}
+
+.auth-checkbox-cell {
+  text-align: center;
+  padding: 0.5rem !important;
+}
+
+.auth-checkbox-cell input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  accent-color: #3b82f6;
+  cursor: pointer;
+}
+
+/* 팝업 스타일 */
+.auth-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  padding: 1rem;
+}
+
+.auth-popup {
+  background: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 24rem;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.auth-popup-large {
+  max-width: 32rem;
+}
+
+.auth-popup-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #1f2937;
+}
+
+.auth-popup-content {
+  margin-bottom: 1.5rem;
+}
+
+.auth-popup-content .auth-input-group {
+  margin-bottom: 1rem;
+}
+
+.auth-popup-content .auth-input-group:last-child {
+  margin-bottom: 0;
+}
+
+.auth-popup-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .auth-container {
+    gap: 1rem;
+  }
+  
+  .auth-search-section,
+  .auth-table-section {
+    padding: 1rem;
+  }
+  
+  .auth-section-title {
+    font-size: 1.125rem;
+  }
+  
+  .auth-table th,
+  .auth-table td {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+  
+  .auth-popup {
+    padding: 1rem;
+    margin: 0.5rem;
+  }
+  
+  .auth-popup-buttons {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .auth-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* 스크롤바 스타일 */
+.auth-table-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.auth-table-container::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+.auth-table-container::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.auth-table-container::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* 포커스 스타일 */
+.auth-btn:focus,
+.auth-input:focus,
+.auth-checkbox-cell input[type="checkbox"]:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* 애니메이션 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.auth-popup {
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* 접근성 개선 */
+.auth-table tbody tr:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: -2px;
+}
+
+.auth-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.auth-btn:disabled:hover {
+  transform: none !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
