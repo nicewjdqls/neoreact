@@ -1,0 +1,180 @@
+/* TransactionHeatmap.css */
+
+.transaction-heatmap-card {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: 12px;
+  padding: 1.25rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.transaction-heatmap-card:hover {
+  border-color: rgba(59, 130, 246, 0.4);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px);
+}
+
+.heatmap-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.heatmap-title {
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.65rem;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.25) 0%, rgba(220, 38, 38, 0.15) 100%);
+  border: 1.5px solid rgba(239, 68, 68, 0.6);
+  border-radius: 5px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #fca5a5;
+  animation: pulse-red 2s ease-in-out infinite;
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+}
+
+@keyframes pulse-red {
+  0%, 100% { 
+    opacity: 1;
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+  }
+  50% { 
+    opacity: 0.75;
+    box-shadow: 0 0 25px rgba(239, 68, 68, 0.5);
+  }
+}
+
+.paused-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.65rem;
+  background: linear-gradient(135deg, rgba(234, 179, 8, 0.25) 0%, rgba(202, 138, 4, 0.15) 100%);
+  border: 1.5px solid rgba(234, 179, 8, 0.6);
+  border-radius: 5px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #fde047;
+  box-shadow: 0 0 15px rgba(234, 179, 8, 0.3);
+}
+
+.heatmap-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.resume-button {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.22) 0%, rgba(22, 163, 74, 0.12) 100%);
+  border: 1.5px solid rgba(34, 197, 94, 0.6);
+  border-radius: 6px;
+  padding: 0.5rem 0.875rem;
+  cursor: pointer;
+  color: #86efac;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 600;
+  box-shadow: 0 2px 10px rgba(34, 197, 94, 0.2);
+}
+
+.resume-button:hover {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.32) 0%, rgba(22, 163, 74, 0.22) 100%);
+  border-color: rgba(34, 197, 94, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 18px rgba(34, 197, 94, 0.35);
+}
+
+.resume-button:active {
+  transform: translateY(0);
+}
+
+.expand-button {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.22) 0%, rgba(37, 99, 235, 0.12) 100%);
+  border: 1.5px solid rgba(59, 130, 246, 0.6);
+  border-radius: 6px;
+  padding: 0.5rem 0.875rem;
+  cursor: pointer;
+  color: #93c5fd;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 600;
+  box-shadow: 0 2px 10px rgba(59, 130, 246, 0.2);
+}
+
+.expand-button:hover {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.32) 0%, rgba(37, 99, 235, 0.22) 100%);
+  border-color: rgba(59, 130, 246, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 18px rgba(59, 130, 246, 0.35);
+}
+
+.expand-button:active {
+  transform: translateY(0);
+}
+
+.expand-icon {
+  font-size: 1.05rem;
+}
+
+.expand-text {
+  font-weight: 600;
+}
+
+.heatmap-canvas-wrapper {
+  height: 220px;
+  position: relative;
+  background: rgba(15, 23, 42, 0.4);
+  border-radius: 8px;
+  padding: 0.75rem;
+  border: 1px solid rgba(99, 102, 241, 0.1);
+}
+
+.heatmap-canvas-wrapper svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .transaction-heatmap-card {
+    padding: 1rem;
+  }
+
+  .heatmap-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .heatmap-controls {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .heatmap-canvas-wrapper {
+    height: 180px;
+  }
+}
